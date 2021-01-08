@@ -1,7 +1,9 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 
-export default function Home() {
+import axios from 'axios'
+
+function Home({ user }) {
   return (
     <div className={styles.container}>
       <Head>
@@ -44,7 +46,7 @@ export default function Home() {
           >
             <h3>Deploy &rarr;</h3>
             <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
+              Instantly deploy your Next.js site to a public URL with Vercel. { user.name }
             </p>
           </a>
         </div>
@@ -63,3 +65,15 @@ export default function Home() {
     </div>
   )
 }
+
+export async function getStaticProps({ params }) {
+  // params contains the post `id`.
+  // If the route is like /posts/1, then params.id is 1
+  const res = await fetch('https://nextjs-mu-lilac-32.vercel.app/api/hello')
+  const user = await res.json()
+
+  // Pass post data to the page via props
+  return { props: { user } }
+}
+
+export default Home
